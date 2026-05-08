@@ -142,11 +142,25 @@ Expected flow:
 
 If Claude tries to generate without a plan, the BRAND BLOCK probably isn't filled in. Check for remaining `[FILL IN]` markers in SKILL.md.
 
-## Cost
+## Cost & choosing a model
 
-Image generation via the Gemini API runs ~$0.04 per call (early 2026 rate; verify at https://ai.google.dev/gemini-api/docs/pricing). A typical thumbnail (1 generation + 1-2 edits) is $0.08-0.12.
+The script defaults to `gemini-2.5-flash-image` (Nano Banana) at ~$0.04 per image. A typical thumbnail (1 generation + 1-2 edits) is $0.08-0.12.
 
 **Image generation is not available on the Gemini API free tier.** You must enable billing on your Google AI Studio account before this skill can work. There's no free trial of the image model; the first call requires a payment method on file.
+
+**Other models you can swap to.** Google ships several image-capable models at different price/quality points. Recent options (verify current list and prices at https://ai.google.dev/gemini-api/docs/pricing):
+
+| Model ID | Approximate cost / image | Notes |
+|---|---|---|
+| `gemini-2.5-flash-image` | ~$0.04 | Default. Fast, cheap, good general quality. |
+| `gemini-3.1-flash-image-preview` | ~$0.045 – $0.067 | Newer 3.x family. May produce sharper results in some styles. |
+| `gemini-3-pro-image-preview` | ~$0.13 – $0.24 | Highest quality in the Gemini family. Slower and pricier. |
+| `imagen-4.0-fast-generate-001` | ~$0.02 | Cheapest. NOTE: Imagen models use a different API endpoint and won't work with this script as-is. |
+| `imagen-4.0-generate-001` | ~$0.04 | Also Imagen — needs script modification. |
+
+**To switch models**, set `GEMINI_IMAGE_MODEL=<model-id>` in your `.env`, or pass `--model=<model-id>` on the command line, or edit the default in `generate.js` directly. Pricing shifts; always verify against the current pricing page before committing to a model.
+
+**For Imagen models**, the script needs a small modification — Imagen uses Google's `predict` endpoint rather than `generateContent`. If you want to use Imagen, fork `generate.js` and adapt the URL and request body shape. Pull requests welcome.
 
 ## Troubleshooting
 
