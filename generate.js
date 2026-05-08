@@ -10,8 +10,7 @@
 //
 // Optional: override the model with --model=<id> or GEMINI_IMAGE_MODEL env var.
 // Default is gemini-2.5-flash-image. See https://ai.google.dev/gemini-api/docs/pricing
-// for available models and prices. (Imagen-family models use a different endpoint
-// and are not supported as a drop-in here.)
+// for available models and prices.
 //
 // API key: read from process.env.GOOGLE_AI_API_KEY (set in shell), falling back to
 // a `.env` file in the current working directory.
@@ -73,12 +72,10 @@ for (const r of refs) parts.push(loadImage(r));
 // ---- Call Gemini ----
 // Model can be overridden via the GEMINI_IMAGE_MODEL env var or the --model arg.
 // See https://ai.google.dev/gemini-api/docs/pricing for available image models.
-// Compatible models (use the generateContent endpoint):
+// Compatible Gemini-family image models (use the generateContent endpoint):
 //   - gemini-2.5-flash-image          (default; ~$0.04/image)
 //   - gemini-3.1-flash-image-preview  (newer; ~$0.045-0.067/image)
 //   - gemini-3-pro-image-preview      (highest quality; ~$0.13-0.24/image)
-// NOTE: Imagen models (imagen-4.0-*) use a different endpoint and won't work
-// with this script as-is.
 const model = arg('model') || process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image';
 const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(process.env.GOOGLE_AI_API_KEY)}`;
 

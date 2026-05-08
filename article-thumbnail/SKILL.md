@@ -120,6 +120,10 @@ SCENE PLAN
 
 Before generating (which costs ~$0.04 per call), show the user the SCENE PLAN and ask if they want to proceed or iterate. Most users iterate the plan 1-2 times before generating.
 
+**If the article has more than one strong angle**, offer 2-3 SCENE PLAN variants instead of one — each focusing on a different aspect of the article (e.g., the cause, the effect, the surprise, the human element, the takeaway). Let the user pick which to generate. Plan iteration is essentially free (just Claude tokens); generating 2-3 actual images costs $0.08-0.12. Picking from plan variants first means the user invests $0.04, not $0.12, to get a result they like.
+
+If after seeing the generated image the user wants to try a different angle anyway, you can run a second generation with one of the alternate plans (additional $0.04). Keep the alternate plans in the conversation in case.
+
 ### Step 4 — Generate via Bash
 
 Build the full image prompt using the PROMPT TEMPLATE below, then call `generate.js` from the user's writing project directory (Claude Code's current working directory):
