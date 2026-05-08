@@ -7,7 +7,7 @@ description: Generate a brand-consistent still thumbnail (cover image) for a blo
 
 Generate brand-consistent still thumbnails for written articles. The thumbnail is a single image showing whatever the user's brand calls for — the recurring character(s), prop(s), composition, and constraints are all defined by the user in the BRAND BLOCK below.
 
-> **This skill is designed for Claude Code only.** It uses Bash to invoke `generate.js` (a small zero-dependency Node script the user keeps in their writing project directory). Claude Desktop does not have Bash and cannot drive this skill.
+> **This skill is designed for Claude Code only.** It uses Bash to invoke `generate.js`, a small zero-dependency Node script that lives in the user's writing project directory (the cwd where Claude Code is running). Claude Desktop does not have Bash and cannot drive this skill.
 
 ## When to use this skill
 
@@ -21,14 +21,14 @@ Don't use this for animated content, video covers, photo-realistic imagery, or t
 
 ## Prerequisites
 
-Before this skill can run, the user must have:
+Before this skill can run, the user must have completed these one-time setup steps:
 
-1. **A Gemini API key** — free tier at https://aistudio.google.com/apikey. Stored in `.env` (with `GOOGLE_AI_API_KEY=...`) in their writing project directory, OR exported in their shell rc.
-2. **`generate.js` in their writing project directory** — a small zero-dependency Node script that calls the Gemini API. Distributed alongside this skill (see the README that came with this skill's distribution).
+1. **A Gemini API key** with billing enabled — stored in `.env` (with `GOOGLE_AI_API_KEY=...`) in the cwd, OR exported in their shell rc.
+2. **`generate.js` in the cwd** — a small zero-dependency Node script that calls the Gemini API.
 3. **Node.js 18+** installed.
 4. **BRAND BLOCK filled in below** — every `[FILL IN ...]` marker replaced. The skill cannot work without this.
 
-If any of these are missing, walk the user through the README that came with this skill's distribution before generating anything. **Specifically check the BRAND BLOCK below for `[FILL IN]` markers** — if any remain, stop and ask the user to complete setup.
+If the BRAND BLOCK still has `[FILL IN]` markers, stop and tell the user the skill isn't customized yet — they need to edit `~/.claude/skills/article-thumbnail/SKILL.md` to replace those markers. If `generate.js` is missing or the API key isn't set, the script's own error message will tell the user the specific problem when invoked.
 
 > ⚠ **Reference images must be FILES on the user's local disk.** The CLI reads PNG/JPG files from absolute filesystem paths. Always pass paths from the BRAND BLOCK; never try to use a chat-attached image as a reference.
 
@@ -141,7 +141,7 @@ The `--refs` argument is a comma-separated list of absolute paths from the BRAND
 
 On success, the script prints `OK: <output_path>` to stdout.
 
-If the script complains about a missing API key, the user hasn't created a `.env` file in their project directory. Pause and walk them through the README that came with this skill's distribution before retrying.
+If the script returns "GOOGLE_AI_API_KEY is not set", the user hasn't created a `.env` file in the current directory yet. Tell them to run `echo 'GOOGLE_AI_API_KEY=your-key' > .env` (with their actual key) in this directory, then retry.
 
 ### Step 5 — View and critique
 
