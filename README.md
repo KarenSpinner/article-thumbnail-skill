@@ -32,7 +32,7 @@ This keeps your API key out of `~/.claude/skills/` and keeps the skill folder sh
 
 - Claude Code installed (`claude --version`)
 - Node.js 18+ (`node --version`)
-- A Gemini API key — free at https://aistudio.google.com/apikey
+- A Gemini API key from https://aistudio.google.com/apikey — **billing must be enabled on your Google AI Studio account.** Image generation (`gemini-2.5-flash-image`) is not available on the free tier; you need a payment method on file. Generations cost about $0.04 each as of early 2026.
 - **Your brand assets** (see next section)
 
 ## Before you start: gather your brand assets
@@ -146,6 +146,8 @@ If Claude tries to generate without a plan, the BRAND BLOCK probably isn't fille
 
 Image generation via the Gemini API runs ~$0.04 per call (early 2026 rate; verify at https://ai.google.dev/gemini-api/docs/pricing). A typical thumbnail (1 generation + 1-2 edits) is $0.08-0.12.
 
+**Image generation is not available on the Gemini API free tier.** You must enable billing on your Google AI Studio account before this skill can work. There's no free trial of the image model; the first call requires a payment method on file.
+
 ## Troubleshooting
 
 **Claude says it doesn't have a skill called "article-thumbnail".**
@@ -163,8 +165,8 @@ A reference path in the BRAND BLOCK is wrong, or the file moved. Verify: `ls "/p
 **Generated images don't match my brand.**
 Composition policies in the BRAND BLOCK may be too vague. "Pure white background, no environment elements, no shadows on the floor" beats "minimal background". Reference images should be your most on-brand examples, not first drafts.
 
-**API quota or billing errors from Google.**
-Free tier has limits — enable billing on your Google AI Studio account.
+**Errors mentioning "billing", "PERMISSION_DENIED", or "model not available".**
+The free Gemini API tier doesn't include image generation. Enable billing in Google AI Studio (Settings → Billing, add a payment method). After billing is on, retry — the script doesn't need to be reinstalled.
 
 ## Uninstall
 
