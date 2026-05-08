@@ -37,7 +37,7 @@ This keeps your API key out of `~/.claude/skills/` and keeps the skill folder sh
 
 ## Before you start: gather your brand assets
 
-This skill cannot generate on-brand thumbnails without YOUR brand reference images. They are not optional and not provided by this distribution — every user supplies their own. **Gather these BEFORE starting the install** so you can paste their absolute file paths into the BRAND BLOCK in step 5.
+This skill cannot generate on-brand thumbnails without your brand reference images. They are not optional and not provided by this distribution — you supply your own. **Gather these BEFORE starting the install** so you can paste their absolute file paths into the BRAND BLOCK in step 5.
 
 You need:
 
