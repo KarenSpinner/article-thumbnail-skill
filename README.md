@@ -52,7 +52,7 @@ If you don't have these:
 - Generate them with an AI tool (Midjourney, ChatGPT image, Recraft, this skill's own `generate.js`) and iterate until on-brand
 - Use existing thumbnail covers from your blog as references
 
-Save them to a stable location on your local disk — the skill needs absolute file paths, and chat-attached images won't work. On macOS, get the absolute path of a file by right-clicking in Finder → hold Option → "Copy as Pathname".
+Save them to a stable location on your local disk — the skill needs absolute file paths. On macOS, get the absolute path of a file by right-clicking in Finder → hold Option → "Copy as Pathname".
 
 > ⚠ **The skill will not work until you customize the BRAND BLOCK** in `~/.claude/skills/article-thumbnail/SKILL.md` with these asset paths and your aesthetic preferences. Step 5 below is required, not optional.
 
@@ -122,9 +122,7 @@ Save the file. Claude Code reads the skill on each invocation, so changes take e
 
 ### About reference images
 
-Save your brand reference images somewhere on local disk you can find later — `~/Pictures/brand/`, `~/Documents/brand/`, anywhere. Then put their absolute paths in the BRAND BLOCK.
-
-**Don't use chat-attached images as references.** The script reads files from local paths; chat attachments are sandboxed and unreachable. To get a file's absolute path on macOS: right-click in Finder → hold Option → "Copy as Pathname".
+Save your brand reference images somewhere on local disk you can find later — `~/Pictures/brand/`, `~/Documents/brand/`, anywhere. Then put their absolute paths in the BRAND BLOCK. To get a file's absolute path on macOS: right-click in Finder → hold Option → "Copy as Pathname".
 
 ## Test
 

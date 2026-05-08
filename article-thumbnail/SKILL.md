@@ -30,8 +30,6 @@ Before this skill can run, the user must have completed these one-time setup ste
 
 If the BRAND BLOCK still has `[FILL IN]` markers, stop and tell the user the skill isn't customized yet — they need to edit `~/.claude/skills/article-thumbnail/SKILL.md` to replace those markers. If `generate.js` is missing or the API key isn't set, the script's own error message will tell the user the specific problem when invoked.
 
-> ⚠ **Reference images must be FILES on the user's local disk.** The CLI reads PNG/JPG files from absolute filesystem paths. Always pass paths from the BRAND BLOCK; never try to use a chat-attached image as a reference.
-
 ---
 
 ## BRAND BLOCK (user customizes this — every field below)
