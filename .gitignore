@@ -1,0 +1,19 @@
+# API keys and secrets
+.env
+.env.local
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Generated thumbnails (users may want their own)
+out/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+!.env.example
