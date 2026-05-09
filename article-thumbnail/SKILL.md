@@ -1,6 +1,6 @@
 ---
 name: article-thumbnail
-description: Generate a brand-consistent still thumbnail (cover image) for a blog or Substack article. For Claude Code only. Activate when the user asks for a thumbnail, cover image, hero image, or social preview for a written article. Reads the article, designs a scene that visually argues the article's main idea, and shells out to a Gemini-backed CLI tool (`thumbnail-cli`) to render it.
+description: Generate a brand-consistent still thumbnail (cover image) for a blog or Substack article. For Claude Code only. Activate when the user asks for a thumbnail, cover image, hero image, or social preview for a written article. Reads the article, designs a scene that visually argues the article's main idea, then runs a small bundled Node script (generate.js) that calls Google's Gemini image API.
 ---
 
 # Article Thumbnail Skill (Claude Code)
