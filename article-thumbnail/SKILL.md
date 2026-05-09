@@ -116,15 +116,19 @@ SCENE PLAN
 
 ### Step 3 — Confirm with user
 
-Before generating (which costs ~$0.04 per call), show the user the SCENE PLAN and ask if they want to proceed or iterate. Most users iterate the plan 1-2 times before generating.
+Each call to `generate.js` is a paid API call. Plan iteration in text is free (just Claude tokens). Before generating anything, show the SCENE PLAN to the user and ask if they want to proceed or iterate.
 
-**If the article has more than one strong angle**, offer 2-3 SCENE PLAN variants instead of one — each focusing on a different aspect of the article (e.g., the cause, the effect, the surprise, the human element, the takeaway). Let the user pick which to generate. Plan iteration is essentially free (just Claude tokens); generating 2-3 actual images costs $0.08-0.12. Picking from plan variants first means the user invests $0.04, not $0.12, to get a result they like.
+**If the article has more than one strong angle**, you can offer the user choices:
 
-If after seeing the generated image the user wants to try a different angle anyway, you can run a second generation with one of the alternate plans (additional $0.04). Keep the alternate plans in the conversation in case.
+- **Multiple SCENE PLAN variants** — propose 2-3 different framings of the article (e.g., the cause, the effect, the surprise, the human element, the takeaway), let the user pick which to render. Cheapest path: only one image generation.
+- **Multiple image variants of ONE scene plan** — Gemini produces different visual interpretations from the same prompt. Useful when the plan is right but you want to compare a few rendered versions and pick the most on-brand one. Run `generate.js` N times with the same prompt and refs, varying only the `--output` filename.
+- **Both** — pick a plan first, then render multiple variants of it.
+
+Don't decide for the user how many images to render — this is their cost decision. Tell them the per-image cost for the model they're using (look it up at https://ai.google.dev/gemini-api/docs/pricing — pricing varies by model and shifts over time, so don't quote a hardcoded number) and ask how many they want. Some users want one shot; others want 3-5 variants to compare.
 
 ### Step 4 — Generate via Bash
 
-Build the full image prompt using the PROMPT TEMPLATE below, then call `generate.js` from the user's writing project directory (Claude Code's current working directory):
+Build the full image prompt using the PROMPT TEMPLATE below, then call `generate.js` from the cwd:
 
 ```bash
 node generate.js \
@@ -133,13 +137,13 @@ node generate.js \
   --output="<output_directory>/<article-slug>-YYYY-MM-DD.png"
 ```
 
-`generate.js` lives in the user's project directory (NOT in this skill folder), so the command is just `node generate.js` — no absolute path needed as long as Claude Code is running from the project directory.
-
 The `--refs` argument is a comma-separated list of absolute paths from the BRAND BLOCK. Skip secondary character if blank.
+
+**If the user asked for multiple variants of the same scene** (Step 3), call `generate.js` once per variant with the same `--prompt` and `--refs` but a different `--output` filename. Run them sequentially (not parallel) to avoid rate-limit issues. Suffix outputs like `<slug>-v1.png`, `<slug>-v2.png`, `<slug>-v3.png`. Each call is a separate API call.
 
 On success, the script prints `OK: <output_path>` to stdout.
 
-If the script returns "GOOGLE_AI_API_KEY is not set", the user hasn't created a `.env` file in the current directory yet. Tell them to run `echo 'GOOGLE_AI_API_KEY=your-key' > .env` (with their actual key) in this directory, then retry.
+If the script returns "GOOGLE_AI_API_KEY is not set", the user hasn't created a `.env` file in the cwd yet. Tell them to run `echo 'GOOGLE_AI_API_KEY=your-key' > .env` (with their actual key) in this directory, then retry.
 
 ### Step 5 — View and critique
 
@@ -167,7 +171,7 @@ node generate.js \
   --output="<new output path>"
 ```
 
-Editing preserves character/style/composition between iterations. Regenerating produces a fresh image that may differ in unwanted ways. Each edit is also ~$0.04.
+Editing preserves character/style/composition between iterations. Regenerating produces a fresh image that may differ in unwanted ways. Each edit is its own paid API call at the model's current per-image rate (see https://ai.google.dev/gemini-api/docs/pricing).
 
 State explicitly what to change AND what to preserve in the edit prompt. Vague instructions like "make it better" don't work.
 
@@ -233,6 +237,8 @@ Pass the references via `--refs` in this order: primary character, secondary cha
 
 ## Cost notes
 
-Each image generation or edit costs about $0.04 via the Gemini API (verify current rate at https://ai.google.dev/gemini-api/docs/pricing). A typical thumbnail run (1 generation + 1-2 edits) is $0.08-0.12.
+Each call to `generate.js` is one API call to the configured model, billed at that model's per-image rate. Pricing varies significantly by model — `gemini-2.5-flash-image` is cheaper than `gemini-3-pro-image-preview` by an order of magnitude or more.
 
-If the user iterates many times, do plan-iteration in TEXT before the first generation. Each plan iteration is essentially free; each image iteration costs real money.
+When the user is making a cost-sensitive decision (number of variants to render, which model to use, whether to iterate via edit vs. regenerate), look up the current per-image price for their chosen model at https://ai.google.dev/gemini-api/docs/pricing and quote the actual current rate. **Do not rely on hardcoded numbers in this skill or in the README** — pricing changes over time and varies by model. Tell the user the current real cost so they can decide.
+
+Plan iteration (text-only conversation about the SCENE PLAN) is free. Image generation and editing each cost one API call. The user decides how many calls to make.
