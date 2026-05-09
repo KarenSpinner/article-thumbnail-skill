@@ -4,7 +4,7 @@ A Claude Code skill that generates brand-consistent illustrated thumbnails for b
 
 **Claude Code only.** Claude Desktop is not supported.
 
-> This resource is a simplified version of the set up I use to generate images for multiple purposes. Feel free to adapt this to your use case as needed.
+> This resource is a simplified version of the set up I use to generate images for Substack and other platforms. Feel free to adapt this to your use case as needed.
 
 ## What's in this folder
 
