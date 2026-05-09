@@ -32,7 +32,7 @@ This keeps your API key out of `~/.claude/skills/` and keeps the skill folder sh
 
 - Claude Code installed (`claude --version`)
 - Node.js 18+ (`node --version`)
-- A Gemini API key from https://aistudio.google.com/apikey — **billing must be enabled on your Google AI Studio account.** Image generation (`gemini-2.5-flash-image`) is not available on the free tier; you need a payment method on file. Generations cost about $0.04 each as of early 2026.
+- A Gemini API key from https://aistudio.google.com/apikey — **billing must be enabled on your Google AI Studio account.** Image generation is not available on the free tier; you need a payment method on file. Per-image pricing varies by model and shifts over time — check https://ai.google.dev/gemini-api/docs/pricing for the current rate of whichever model you're using.
 - **Your brand assets** (see next section)
 
 ## Before you start: gather your brand assets
@@ -142,19 +142,17 @@ If Claude tries to generate without a plan, the BRAND BLOCK probably isn't fille
 
 ## Cost & choosing a model
 
-The script defaults to `gemini-2.5-flash-image` (Nano Banana) at ~$0.04 per image. A typical thumbnail (1 generation + 1-2 edits) is $0.08-0.12.
+Each call to `generate.js` is one paid API call to whatever image model you're using. There's no batching, no flat fee — straight per-call billing.
 
 **Image generation is not available on the Gemini API free tier.** You must enable billing on your Google AI Studio account before this skill can work. There's no free trial of the image model; the first call requires a payment method on file.
 
-**Other models you can swap to.** Google ships several image-capable models in the Gemini family at different price/quality points. Recent options (verify current list and prices at https://ai.google.dev/gemini-api/docs/pricing):
+**Pricing varies by model and changes over time.** Always verify current per-image rates at https://ai.google.dev/gemini-api/docs/pricing before committing to a model — don't trust hardcoded numbers in any documentation, including this one. As a rough sense of relative costs (verify before relying on these):
 
-| Model ID | Approximate cost / image | Notes |
-|---|---|---|
-| `gemini-2.5-flash-image` | ~$0.04 | Default. Fast, cheap, good general quality. |
-| `gemini-3.1-flash-image-preview` | ~$0.045 – $0.067 | Newer 3.x family. May produce sharper results in some styles. |
-| `gemini-3-pro-image-preview` | ~$0.13 – $0.24 | Highest quality in the Gemini family. Slower and pricier. |
+- `gemini-2.5-flash-image` (default) — the cheapest of the family, the fastest, good general quality.
+- `gemini-3.1-flash-image-preview` — newer, somewhat pricier, may produce sharper results in some styles.
+- `gemini-3-pro-image-preview` — highest quality in the Gemini family, an order of magnitude pricier than 2.5 flash.
 
-**To switch models**, set `GEMINI_IMAGE_MODEL=<model-id>` in your `.env`, or pass `--model=<model-id>` on the command line, or edit the default in `generate.js` directly. Pricing shifts; always verify against the current pricing page before committing to a model.
+**To switch models**, set `GEMINI_IMAGE_MODEL=<model-id>` in your `.env`, pass `--model=<model-id>` on the command line, or edit the default in `generate.js` directly.
 
 ## Troubleshooting
 
