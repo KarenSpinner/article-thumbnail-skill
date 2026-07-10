@@ -12,6 +12,9 @@
 // Default is gemini-2.5-flash-image. See https://ai.google.dev/gemini-api/docs/pricing
 // for available models and prices.
 //
+// Optional: set output aspect ratio with --aspect-ratio=16:9 (e.g. 1:1, 16:9, 9:16, 4:3).
+// Without it, the model defaults to 1:1 regardless of what the prompt text asks for.
+//
 // API key: read from process.env.GOOGLE_AI_API_KEY (set in shell), falling back to
 // a `.env` file in the current working directory.
 //
@@ -42,6 +45,7 @@ const prompt = arg('prompt');
 const refsArg = arg('refs');
 const input = arg('input');
 const output = arg('output');
+const aspectRatio = arg('aspect-ratio');
 
 if (!prompt) { console.error('Error: --prompt is required'); process.exit(1); }
 if (!output) { console.error('Error: --output is required'); process.exit(1); }
@@ -79,12 +83,17 @@ for (const r of refs) parts.push(loadImage(r));
 const model = arg('model') || process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image';
 const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(process.env.GOOGLE_AI_API_KEY)}`;
 
+const body = { contents: [{ role: 'user', parts }] };
+if (aspectRatio) {
+  body.generationConfig = { imageConfig: { aspectRatio } };
+}
+
 let response, json;
 try {
   response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ role: 'user', parts }] }),
+    body: JSON.stringify(body),
   });
   json = await response.json();
 } catch (e) {
