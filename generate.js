@@ -106,6 +106,23 @@ if (!imgPart) {
 }
 
 // ---- Save ----
-fs.mkdirSync(path.dirname(path.resolve(output)), { recursive: true });
-fs.writeFileSync(output, Buffer.from(imgPart.inlineData.data, 'base64'));
-console.log('OK:', output);
+// The model picks the encoding, so trust the response mime type over whatever
+// extension --output happened to use. Writing JPEG bytes to a .png leaves a file
+// that Finder mislabels and cannot preview.
+const extsByMime = {
+  'image/png': ['.png'],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/webp': ['.webp'],
+};
+const validExts = extsByMime[imgPart.inlineData.mimeType];
+let outPath = output;
+if (validExts && !validExts.includes(path.extname(output).toLowerCase())) {
+  const dir = path.dirname(output);
+  const stem = path.basename(output, path.extname(output));
+  outPath = path.join(dir, stem + validExts[0]);
+  console.warn(`Note: model returned ${imgPart.inlineData.mimeType}, writing ${outPath}`);
+}
+
+fs.mkdirSync(path.dirname(path.resolve(outPath)), { recursive: true });
+fs.writeFileSync(outPath, Buffer.from(imgPart.inlineData.data, 'base64'));
+console.log('OK:', outPath);
